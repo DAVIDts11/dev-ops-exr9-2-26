@@ -1,9 +1,10 @@
 const express = require('express')
+
 const app = express()
 const port = 3000
 
 app.get('/', (req, res) => {
-  res.send('lab-1 Dockerfile')
+  res.send('lab-03 - volume')
 })
 
 app.listen(port, () => {
