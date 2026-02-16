@@ -15,3 +15,5 @@ docker run -d --name App2 -e APP_ID=App2  -p 3002:3000 -v ./logs/app2:/usr/src/a
 node-health-app:v0.1
 
 docker rm -f $(docker ps -q)
+
+$(pwd)
