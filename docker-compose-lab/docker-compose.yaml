@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: my_database
+      MYSQL_USER: david
+      MYSQL_PASSWORD: secretpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - my_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "david", "-psecretpassword"]
+      interval: 5s
+      retries: 5
+
+  application:
+    image: node_mysql:v0.1
+    restart: always
+    container_name: my_application
+    ports:
+      - "3000:3000"
+    environment:
+      HOST: mysql
+      USER: david
+      PASSWORD: secretpassword
+      DATABASE: my_database
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - my_network
+
+volumes:
+  mysql_data:
+
+networks:
+  my_network:
+    driver: bridge
